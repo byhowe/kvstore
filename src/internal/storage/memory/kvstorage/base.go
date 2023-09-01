@@ -11,7 +11,7 @@ type MemoryDB map[string]any
 
 // Storer defines storage behaviours.
 type Storer interface {
-	Set(key string, value any) any
+	Set(key string, value any) (any, error)
 	Get(key string) (any, error)
 	Update(key string, value any) (any, error)
 	Delete(key string) error
@@ -42,4 +42,9 @@ func New(options ...StorageOption) Storer {
 	}
 
 	return ms
+}
+
+func (ms *memoryStorage) keyExists(key string) bool {
+	_, ok := ms.db[key]
+	return ok
 }
